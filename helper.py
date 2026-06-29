@@ -2,7 +2,7 @@ import numpy as np
 
 def medal_tally(df):
     medal_tally = df.drop_duplicates(subset=['Team','NOC','Games','Year','City','Sport','Event','Medal'])
-    medal_tally = medal_tally.groupby('region').sum()[['Gold','Silver','Bronze']].sort_values('Gold',ascending=False)
+    medal_tally = medal_tally.groupby('region', as_index=False).sum()[['region','Gold','Silver','Bronze']].sort_values('Gold',ascending=False)
     medal_tally['total'] = medal_tally['Gold'] + medal_tally['Silver'] + medal_tally['Bronze'] 
 
     medal_tally['Gold'] =medal_tally['Gold'].astype('int')
@@ -22,3 +22,27 @@ def country_year_list(df):
     country.insert(0, 'Overall')
 
     return years,country
+
+
+def fetch_medal_tally(df,year, country):
+    base_df = df.drop_duplicates(subset=['Team','NOC','Games','Year','City','Sport','Event','Medal'])
+
+    if year == 'Overall' and country == 'Overall':
+        x = base_df.groupby('region', as_index=False).sum()[['region','Gold','Silver','Bronze']].sort_values('Gold',ascending=False)
+    elif year == 'Overall' and country != 'Overall':
+        temp_df = base_df[base_df['region'] == country]
+        x = temp_df.groupby('Year', as_index=False).sum()[['Year','Gold','Silver','Bronze']].sort_values('Year',ascending=True)
+    elif year != 'Overall' and country == 'Overall':
+        temp_df = base_df[base_df['Year'] == int(year)]
+        x = temp_df.groupby('region', as_index=False).sum()[['region','Gold','Silver','Bronze']].sort_values('Gold',ascending=False)
+    else:
+        temp_df = base_df[(base_df['Year'] == int(year)) & (base_df['region'] == country)]
+        x = temp_df.groupby('region', as_index=False).sum()[['region','Gold','Silver','Bronze']].sort_values('Gold',ascending=False)
+    x['total'] = x['Gold'] + x['Silver'] + x['Bronze']
+
+    x['Gold'] = x['Gold'].astype('int')
+    x['Silver'] = x['Silver'].astype('int')
+    x['Bronze'] = x['Bronze'].astype('int')
+    x['total'] = x['total'].astype('int')
+
+    return x
