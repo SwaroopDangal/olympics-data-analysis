@@ -12,4 +12,8 @@ user_menu = st.sidebar.radio('Select an option', ['Medal Tally', 'Overall Analys
 
 
 if user_menu == 'Medal Tally':
+    st.sidebar.header('Medal Tally')
+    years,country = helper.country_year_list(df)
+    selected_year = st.sidebar.selectbox('Select a year', years)
+    selected_country = st.sidebar.selectbox('Select a country', country)
     st.dataframe(helper.medal_tally(df))
