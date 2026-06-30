@@ -10,7 +10,7 @@ def medal_tally(df):
     medal_tally['Bronze'] = medal_tally['Bronze'].astype('int')
     medal_tally['total'] = medal_tally['total'].astype('int')
 
-    return medal_tally
+    return medal_tally.reset_index(drop=True)
 
 def country_year_list(df):
     years = df['Year'].unique().tolist()
@@ -45,7 +45,7 @@ def fetch_medal_tally(df,year, country):
     x['Bronze'] = x['Bronze'].astype('int')
     x['total'] = x['total'].astype('int')
 
-    return x
+    return x.reset_index(drop=True)
 
 def participating_nations_over_time(df):
     nations_over_time = df.drop_duplicates(['Year','region'])['Year'].value_counts().reset_index().sort_values('Year')
