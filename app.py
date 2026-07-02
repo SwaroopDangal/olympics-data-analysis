@@ -91,3 +91,16 @@ if user_menu == 'Overall Analysis':
     selected_sport = st.selectbox('Select a Sport',sport_list)
     x=helper.most_successfull_athletes(df,selected_sport)
     st.table(x)
+
+
+
+
+if user_menu == 'Country-wise Analysis':
+    st.sidebar.title("Country-wise Analysis")
+    countries = df['region'].dropna().unique().tolist()
+    countries.sort()
+    selected_country = st.sidebar.selectbox('Select a country',countries)
+    country_df = helper.year_wise_medal_tally(df,selected_country)
+    fig = px.line(country_df, x='Year', y='Medal')
+    st.title("Medal Tally Over the years for " + selected_country)
+    st.plotly_chart(fig)
