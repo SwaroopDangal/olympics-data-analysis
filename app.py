@@ -14,6 +14,9 @@ df = preprocessor.preprocess(df, region_df)
 
 user_menu = st.sidebar.radio('Select an option', ['Medal Tally', 'Overall Analysis', 'Country-wise Analysis', 'Athlete-wise Analysis'])
 
+st.sidebar.title('Olympics Analysis')
+st.sidebar.image("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCx2-NQQjCIlmS03-RgB6eKCXu5S8s-2WathOeLZm3Bg&s=10")
+
 
 
 if user_menu == 'Medal Tally':
@@ -160,3 +163,9 @@ if user_menu == 'Athlete-wise Analysis':
     fig,ax = plt.subplots()
     ax = sns.scatterplot(data=temp_df, x='Weight', y='Height', hue='Medal',style='Sex',s=50)
     st.pyplot(fig)
+
+    st.title("Men Vs Women Participation Over the Years")
+    final = helper.men_v_women(df)
+    fig = px.line(final, x="Year", y=["Male", "Female"])
+    fig.update_layout(autosize=False, width=1000, height=600)
+    st.plotly_chart(fig)
