@@ -1,3 +1,5 @@
+from typing_extensions import final
+
 import numpy as np
 
 def medal_tally(df):
@@ -97,3 +99,12 @@ def weight_height_scatter(df,sport):
         return temp_df
     else:
         return athlete_df
+    
+
+def men_v_women(df):
+    athlete_df = df.drop_duplicates(subset=['Name','region'])
+    men = athlete_df[athlete_df['Sex'] == 'M'].groupby('Year').count()['Name'].reset_index()
+    women = athlete_df[athlete_df['Sex'] == 'F'].groupby('Year').count()['Name'].reset_index()
+    final = men.merge(women,on='Year')
+    final.rename(columns={'Name_x':'Male','Name_y':'Female'},inplace=True)
+    return final
