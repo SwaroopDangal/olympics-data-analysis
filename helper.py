@@ -87,3 +87,13 @@ def most_successfull_athletes_country(df,country):
     x= temp_df['Name'].value_counts().reset_index().head(10).merge(df,left_on='Name',right_on='Name',how='left')[['Name','count','Sport']].drop_duplicates('Name').rename(columns={'count':'No. of medals','Sport':'Sport','region':'Nation'})
 
     return x.reset_index(drop=True)
+
+
+def weight_height_scatter(df,sport):
+    athlete_df = df.drop_duplicates(subset=['Name','region'])
+    athlete_df['Medal'].fillna('No Medal', inplace=True)
+    if sport != 'Overall':
+        temp_df = athlete_df[athlete_df['Sport'] == sport]
+        return temp_df
+    else:
+        return athlete_df
