@@ -4,6 +4,7 @@ import preprocessor,helper
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.figure_factory as ff
 
 
 df = pd.read_csv('athlete_events.csv')
@@ -110,3 +111,19 @@ if user_menu == 'Country-wise Analysis':
     ax = sns.heatmap(pt,annot=True)
     st.title(selected_country + " excels in the following sports")
     st.pyplot(fig)
+
+    top_10 = helper.most_successfull_athletes_country(df,selected_country)
+    st.title("Top 10 Athletes of " + selected_country)
+    st.table(top_10)
+
+
+if user_menu == 'Athlete-wise Analysis':
+    athlete_df = df.drop_duplicates(subset=['Name','region'])
+    x1= athlete_df['Age'].dropna()
+    x2 = athlete_df[athlete_df['Medal'] == 'Gold']['Age'].dropna()
+    x3 = athlete_df[athlete_df['Medal'] == 'Silver']['Age'].dropna()
+    x4 = athlete_df[athlete_df['Medal'] == 'Bronze']['Age'].dropna()
+    fig = ff.create_distplot([x1,x2,x3,x4],['Overall Age','Gold Medalist','Silver medalist','Bronze Medalist'],show_hist=False, show_rug=False)
+    fig.update_layout(autosize=False,width=1000,height=600)
+    st.title("Distribution of Age")
+    st.plotly_chart(fig)
